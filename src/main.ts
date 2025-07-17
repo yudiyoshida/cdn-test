@@ -17,6 +17,8 @@ function mountWidget() {
 
   appInstance = createApp(App)
   appInstance.mount('#my-vue-widget-root')
+
+  return 'Widget mounted successfully'
 }
 
 function unmountWidget() {
