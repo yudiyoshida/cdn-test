@@ -18,6 +18,7 @@ export default defineConfig({
     },
   },
   build: {
+    cssCodeSplit: true,
     lib: {
       entry: 'src/main.ts',
       name: 'WidgetEmbed',
