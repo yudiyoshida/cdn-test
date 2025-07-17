@@ -1,37 +1,62 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApp } from 'vue'
-import App from './App.vue'
+import WidgetApp from './App.vue'
 
-let appInstance: any = null
+const WidgetSingleton = () => {
+  let appInstance: ReturnType<typeof createApp> | null = null
+  let containerEl: HTMLElement | null = null
+  let propsData: Record<string, any> = {}
 
-function mountWidget() {
-  if (document.getElementById('my-vue-widget-root')) return
+  function createContainer() {
+    const el = document.createElement('div')
+    el.id = 'my-widget-container'
+    el.style.position = 'fixed'
+    el.style.bottom = '20px'
+    el.style.left = '20px'
+    el.style.zIndex = '999999'
+    document.body.appendChild(el)
+    return el
+  }
 
-  const el = document.createElement('div')
-  el.id = 'my-vue-widget-root'
-  el.style.position = 'fixed'
-  el.style.bottom = '20px'
-  el.style.left = '20px'
-  el.style.zIndex = '9999'
-  document.body.appendChild(el)
+  function mount() {
+    if (appInstance) return
 
-  appInstance = createApp(App)
-  appInstance.mount('#my-vue-widget-root')
+    containerEl = createContainer()
+    appInstance = createApp(WidgetApp, propsData)
+    appInstance.mount(containerEl)
+  }
 
-  return 'Widget mounted successfully'
-}
+  function unmount() {
+    if (appInstance && containerEl) {
+      appInstance.unmount()
+      containerEl.remove()
+      appInstance = null
+      containerEl = null
+    }
+  }
 
-function unmountWidget() {
-  if (appInstance) {
-    appInstance.unmount()
-    const el = document.getElementById('my-vue-widget-root')
-    el?.remove()
-    appInstance = null
+  function updateProps(newProps: Record<string, any>) {
+    propsData = { ...propsData, ...newProps }
+
+    if (appInstance) {
+      unmount()
+      mount()
+    }
+  }
+
+  return {
+    open(config: Record<string, any> = {}) {
+      updateProps(config)
+      mount()
+    },
+    close() {
+      unmount()
+    },
+    update(config: Record<string, any> = {}) {
+      updateProps(config)
+    }
   }
 }
 
-// Expor na janela global
-(window as any).MyWidget = {
-  open: mountWidget,
-  close: unmountWidget
-}
+// Expor no objeto global
+(window as any).MyWidget = WidgetSingleton()

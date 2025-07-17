@@ -1,13 +1,26 @@
 <script setup lang="ts">
+defineProps<{
+  imageUrl?: string
+  productName?: string
+}>()
+
+function close() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).MyWidget.close()
+}
 </script>
 
 <template>
-  <div class="fixed bottom-4 right-4 z-50">
-    <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4">Provador Virtual</h2>
-        <input type="file" accept="image/*" />
-      </div>
-    </div>
+  <div class="bg-white rounded-xl shadow-xl p-6 w-[300px]">
+    <h2 class="text-lg font-bold mb-2">Provador Virtual</h2>
+    <img v-if="imageUrl" :src="imageUrl" class="w-full rounded" />
+    <p class="mt-2 text-sm text-gray-700">Produto: {{ productName }}</p>
+
+    <button
+      class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+      @click="close"
+    >
+      Fechar
+    </button>
   </div>
 </template>
