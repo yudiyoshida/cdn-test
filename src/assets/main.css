@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #C52929;
+}
+
+* {
+  font-family: Poppins, "Helvetica Neue", sans-serif;
+}
+
+.top-action {
+  @apply absolute top-4 w-full flex justify-between items-center gap-4 px-4;
+}
+
+.bottom-action {
+  @apply absolute bottom-4 w-full flex justify-between items-center gap-4 px-4;
+}

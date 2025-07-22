@@ -1,26 +1,21 @@
 <script setup lang="ts">
-defineProps<{
-  imageUrl?: string
-  productName?: string
-}>()
+import { ref } from 'vue';
+import { CircleX } from 'lucide-vue-next';
+import FittingRoomPage from './pages/fitting-room/FittingRoomPage.vue';
+import IconButtonComponent from './components/button/IconButtonComponent.vue';
+import SplashScreenPage from './pages/splash-screen/SplashScreenPage.vue';
 
-function close() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).MyWidget.close()
-}
+const showSplashScreen = ref(true);
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow-xl p-6 w-[300px]">
-    <h2 class="text-lg font-bold mb-2">Provador Virtual</h2>
-    <img v-if="imageUrl" :src="imageUrl" class="w-full rounded" />
-    <p class="mt-2 text-sm text-gray-700">Produto: {{ productName }}</p>
-
-    <button
-      class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-      @click="close"
-    >
-      Fechar
-    </button>
+  <div class="relative">
+    <template v-if="showSplashScreen">
+      <SplashScreenPage @hide="showSplashScreen = false" />
+    </template>
+    <template v-else>
+      <IconButtonComponent class="absolute top-4 right-4 z-10" :icon="CircleX" />
+      <FittingRoomPage />
+    </template>
   </div>
 </template>
