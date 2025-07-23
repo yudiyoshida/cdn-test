@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/services/socket/socketio';
+import { Shirt, User2 } from 'lucide-vue-next';
+import { useSnackbar } from 'vue3-snackbar';
+import IconButtonComponent from '@/components/button/IconButtonComponent.vue';
 import ImageComponent from '@/components/image/ImageComponent.vue';
 import LoadingComponent from '@/components/loading/LoadingComponent.vue';
 import ModelComponent from '@/components/model/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
 import type { GetPrediction } from '@/services/socket/events/get-prediction';
 import type { RunPrediction } from '@/services/socket/events/run-prediction';
-import { useSnackbar } from 'vue3-snackbar';
 
 const isChangingModel = ref(true);
 const isLoading = ref(false);
@@ -65,8 +67,11 @@ function tryOn() {
   <template v-else>
     <ImageComponent :image="modelImage!" />
     <div class="bottom-action">
-      <TextButtonComponent text="Trocar modelo" @click="isChangingModel = true" />
-      <TextButtonComponent text="Experimentar roupa" @click="tryOn" />
+      <div class="space-x-2">
+        <IconButtonComponent :icon="User2" @click="isChangingModel = true" />
+        <IconButtonComponent :icon="Shirt" />
+      </div>
+      <TextButtonComponent text="Vestir roupa!" @click="tryOn" />
     </div>
   </template>
 </template>

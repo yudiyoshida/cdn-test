@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <ButtonComponent>
+  <ButtonComponent class="bg-primary text-white p-2">
     <component :is="icon" />
   </ButtonComponent>
 </template>
