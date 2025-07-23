@@ -11,12 +11,12 @@ const emit = defineEmits<{
 }>();
 
 const models = [
-  'src/assets/images/male_1.png',
-  'src/assets/images/male_2.png',
-  'src/assets/images/male_3.png',
-  'src/assets/images/female_1.png',
-  'src/assets/images/female_2.png',
-  'src/assets/images/female_3.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/male_1.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/male_2.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/male_3.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_1.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_2.png',
+  'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_3.png',
 ];
 
 const currentModel = ref(models[0]);
