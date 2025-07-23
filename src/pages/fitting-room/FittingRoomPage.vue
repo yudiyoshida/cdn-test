@@ -1,35 +1,62 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { socket } from '@/services/socket/socketio';
+import ImageComponent from '@/components/image/ImageComponent.vue';
+import LoadingComponent from '@/components/loading/LoadingComponent.vue';
 import ModelComponent from './components/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
+import type { GetPrediction } from '@/services/socket/events/get-prediction';
+import type { RunPrediction } from '@/services/socket/events/run-prediction';
 
 const isChangingModel = ref(true);
+const isLoading = ref(false);
+
 const modelImage = ref<string | null>(null);
+const garmentImage = ref<string | null>(null);
+const category = 'one-pieces';
+const mode = 'performance';
+
+onMounted(() => {
+  socket.connect();
+  socket.on('get-prediction', (data: GetPrediction) => {
+    modelImage.value = data.output![0];
+    isLoading.value = false;
+  });
+});
+
+onUnmounted(() => {
+  socket.removeAllListeners();
+  socket.disconnect();
+});
 
 function onModelChange(image: string) {
-  isChangingModel.value = false;
   modelImage.value = image;
+  isChangingModel.value = false;
 }
 
 function tryOn() {
-  // Logic to try on clothes
-  console.log('Trying on clothes');
+  isLoading.value = true;
+  isChangingModel.value = false;
+  
+  const data: RunPrediction = {
+    modelImage: 'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_model.jpeg',
+    garmentImage: 'https://dr3ssup.s3.us-east-2.amazonaws.com/5a0326c7-3678-4777-b559-f2339944dd6a-image.png',
+    category,
+    mode
+  };
+  socket.emit('run-prediction', data);
 }
 </script>
 
 <template>
-  <ModelComponent
-    :is-changing-model="isChangingModel"
-    @model-changed="onModelChange"
-  />
-  <div v-if="!isChangingModel" class="bottom-action">
-    <TextButtonComponent
-      text="Trocar modelo"
-      @click="isChangingModel = true"
-    />
-    <TextButtonComponent
-      text="Experimentar roupa"
-      @click="tryOn"
-    />
-  </div>
+  <LoadingComponent v-if="isLoading" />
+  
+  <ModelComponent v-if="isChangingModel" @model-changed="onModelChange" />
+  <template v-else>
+    <ImageComponent :image="modelImage!" />
+    <div class="bottom-action">
+      <TextButtonComponent text="Trocar modelo" @click="isChangingModel = true" />
+      <TextButtonComponent text="Experimentar roupa" @click="tryOn" />
+    </div>
+  </template>
 </template>

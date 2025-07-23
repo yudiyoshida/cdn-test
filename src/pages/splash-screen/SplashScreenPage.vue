@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LogoComponent from '@/components/logo/LogoComponent.vue';
 import { onMounted } from 'vue';
 
 const emit = defineEmits<{
@@ -12,6 +13,6 @@ onMounted(() => {
 
 <template>
   <section class="h-screen w-full flex items-center justify-center bg-primary">
-    <img src="@/assets/images/logo.webp" alt="logo" class="w-56">
+    <LogoComponent class="w-56" />
   </section>
 </template>

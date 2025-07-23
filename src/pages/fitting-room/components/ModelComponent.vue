@@ -3,11 +3,8 @@ import { onMounted, ref, useTemplateRef } from 'vue';
 import { Camera, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import IconButtonComponent from '@/components/button/IconButtonComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
-import ImageSelectorComponent from '../../../components/image-selector/ImageSelectorComponent.vue';
-
-defineProps<{
-  isChangingModel: boolean;
-}>();
+import ImageComponent from '@/components/image/ImageComponent.vue';
+import ImageSelectorComponent from '@/components/image/ImageSelectorComponent.vue';
 
 const emit = defineEmits<{
   (e: 'modelChanged', image: string): void;
@@ -17,6 +14,9 @@ const models = [
   'src/assets/images/male_1.png',
   'src/assets/images/male_2.png',
   'src/assets/images/male_3.png',
+  'src/assets/images/female_1.png',
+  'src/assets/images/female_2.png',
+  'src/assets/images/female_3.png',
 ];
 
 const currentModel = ref(models[0]);
@@ -25,7 +25,7 @@ const imageSelectorRef = useTemplateRef('imageSelectorRef');
 onMounted(() => {
   const modelIndex = Math.floor(Math.random() * models.length);
   currentModel.value = models[modelIndex];
-})
+});
 
 function selectPreviousModel() {
   const currentIndex = models.indexOf(currentModel.value);
@@ -66,13 +66,9 @@ function changeModel() {
 
 <template>
   <div class="flex items-center justify-center h-screen relative">
-    <img
-      :src="currentModel"
-      alt="imagem do modelo"
-      class="h-screen object-cover mx-auto"
-    />
+    <ImageComponent :image="currentModel" />
 
-    <div v-if="isChangingModel && !imageSelectorRef?.file">
+    <div v-if="!imageSelectorRef?.file">
       <IconButtonComponent
         :icon="ChevronLeft"
         class="circular-button absolute left-4"
@@ -85,7 +81,7 @@ function changeModel() {
       />
     </div>
 
-    <div v-if="isChangingModel" class="bottom-action">
+    <div class="bottom-action">
       <TextButtonComponent
         text="Selecionar"
         class="w-full"

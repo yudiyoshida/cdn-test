@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 
-const fileInput = useTemplateRef('fileInput')
+const fileInput = useTemplateRef('fileInput');
 const file = ref<File | null>(null);
 
 defineExpose({
