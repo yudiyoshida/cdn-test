@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/services/socket/socketio';
 import ImageComponent from '@/components/image/ImageComponent.vue';
 import LoadingComponent from '@/components/loading/LoadingComponent.vue';
-import ModelComponent from './components/ModelComponent.vue';
+import ModelComponent from '@/components/model/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
 import type { GetPrediction } from '@/services/socket/events/get-prediction';
 import type { RunPrediction } from '@/services/socket/events/run-prediction';
