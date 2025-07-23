@@ -7,20 +7,30 @@ import ModelComponent from './components/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
 import type { GetPrediction } from '@/services/socket/events/get-prediction';
 import type { RunPrediction } from '@/services/socket/events/run-prediction';
+import { useSnackbar } from 'vue3-snackbar';
 
 const isChangingModel = ref(true);
 const isLoading = ref(false);
+const snackbar = useSnackbar();
 
 const modelImage = ref<string | null>(null);
 const garmentImage = ref<string | null>(null);
-const category = 'one-pieces';
+const category = 'auto';
 const mode = 'performance';
 
 onMounted(() => {
   socket.connect();
   socket.on('get-prediction', (data: GetPrediction) => {
-    modelImage.value = data.output![0];
     isLoading.value = false;
+
+    if (data.error) {
+      snackbar.add({
+        type: 'error',
+        text: 'Erro ao obter a imagem do modelo. Por favor, tente novamente.',
+      });
+      return;
+    }
+    modelImage.value = data.output![0];
   });
 });
 
@@ -39,8 +49,8 @@ function tryOn() {
   isChangingModel.value = false;
   
   const data: RunPrediction = {
-    modelImage: 'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_model.jpeg',
-    garmentImage: 'https://dr3ssup.s3.us-east-2.amazonaws.com/5a0326c7-3678-4777-b559-f2339944dd6a-image.png',
+    modelImage: modelImage.value!,
+    garmentImage: 'https://dressup-homolog.s3.us-east-2.amazonaws.com/4cc64cee-6728-48cd-a274-e6feebaff42c-image.png',
     category,
     mode
   };
