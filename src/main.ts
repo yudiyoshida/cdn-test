@@ -1,14 +1,11 @@
-import 'vue3-snackbar/styles';
 import './assets/main.css';
 
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
-import { SnackbarService } from 'vue3-snackbar';
 import App from './App.vue';
 
 const app = createApp(App);
 
-app.use(SnackbarService);
 app.use(createPinia());
 app.mount('#app');
 

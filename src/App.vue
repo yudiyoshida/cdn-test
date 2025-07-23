@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import 'vue-sonner/style.css';
+
 import { ref } from 'vue';
 import { X } from 'lucide-vue-next';
-import { Vue3Snackbar } from 'vue3-snackbar';
+import { Toaster } from './lib/ui/sonner';
 import FittingRoomPage from './pages/fitting-room/FittingRoomPage.vue';
 import IconButtonComponent from './components/button/IconButtonComponent.vue';
 import SplashScreenPage from './pages/splash-screen/SplashScreenPage.vue';
@@ -10,6 +12,7 @@ const showSplashScreen = ref(true);
 </script>
 
 <template>
+  <Toaster />
   <div class="relative">
     <template v-if="showSplashScreen">
       <SplashScreenPage @hide="showSplashScreen = false" />
@@ -19,5 +22,4 @@ const showSplashScreen = ref(true);
       <FittingRoomPage />
     </template>
   </div>
-  <Vue3Snackbar top right :duration="4000" />
 </template>

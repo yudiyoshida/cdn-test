@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/services/socket/socketio';
+import { toast } from 'vue-sonner';
 import { Shirt, User2 } from 'lucide-vue-next';
-import { useSnackbar } from 'vue3-snackbar';
 import IconButtonComponent from '@/components/button/IconButtonComponent.vue';
 import ImageComponent from '@/components/image/ImageComponent.vue';
 import LoadingComponent from '@/components/loading/LoadingComponent.vue';
@@ -13,7 +13,6 @@ import type { RunPrediction } from '@/services/socket/events/run-prediction';
 
 const isChangingModel = ref(true);
 const isLoading = ref(false);
-const snackbar = useSnackbar();
 
 const modelImage = ref<string | null>(null);
 const garmentImage = ref<string | null>(null);
@@ -26,9 +25,8 @@ onMounted(() => {
     isLoading.value = false;
 
     if (data.error) {
-      snackbar.add({
-        type: 'error',
-        text: 'Erro ao obter a imagem do modelo. Por favor, tente novamente.',
+      toast.error('Erro ao obter a imagem do modelo. Por favor, tente novamente.', {
+        closeButton: true,
       });
       return;
     }
