@@ -1,7 +1,18 @@
+<script setup lang="ts">
+defineProps<{
+  disabled?: boolean;
+}>();
+</script>
+
 <template>
   <button
     type="button"
-    class="cursor-pointer rounded-full opacity-85 hover:opacity-100 transition-opacity duration-300"
+    :disabled
+    class="
+      cursor-pointer rounded-full transition-opacity duration-300
+      opacity-85 hover:opacity-100
+      disabled:cursor-not-allowed disabled:bg-zinc-500
+    "
   >
     <slot />
   </button>

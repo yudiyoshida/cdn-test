@@ -3,14 +3,14 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/services/socket/socketio';
 import { toast } from 'vue-sonner';
 import { Shirt, User2 } from 'lucide-vue-next';
+import type { GetPrediction } from '@/services/socket/events/get-prediction';
+import type { RunPrediction } from '@/services/socket/events/run-prediction';
+import GarmentComponent from '@/components/garment/GarmentComponent.vue';
 import IconButtonComponent from '@/components/button/IconButtonComponent.vue';
 import ImageComponent from '@/components/image/ImageComponent.vue';
 import LoadingComponent from '@/components/loading/LoadingComponent.vue';
 import ModelComponent from '@/components/model/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
-import type { GetPrediction } from '@/services/socket/events/get-prediction';
-import type { RunPrediction } from '@/services/socket/events/run-prediction';
-import GarmentComponent from '@/components/garment/GarmentComponent.vue';
 
 const isChangingModel = ref(true);
 const isLoading = ref(false);
@@ -45,13 +45,17 @@ function onModelChange(image: string) {
   isChangingModel.value = false;
 }
 
+function onGarmentChange(image: string) {
+  garmentImage.value = image;
+}
+
 function tryOn() {
   isLoading.value = true;
   isChangingModel.value = false;
   
   const data: RunPrediction = {
     modelImage: modelImage.value!,
-    garmentImage: 'https://dressup-homolog.s3.us-east-2.amazonaws.com/4cc64cee-6728-48cd-a274-e6feebaff42c-image.png',
+    garmentImage: garmentImage.value!,
     category,
     mode
   };
@@ -67,12 +71,23 @@ function tryOn() {
     <ImageComponent :image="modelImage!" />
     <div class="bottom-action">
       <div class="space-x-2">
-        <IconButtonComponent :icon="User2" @click="isChangingModel = true" />
-        <GarmentComponent>
-          <IconButtonComponent :icon="Shirt" />
+        <IconButtonComponent
+          :icon="User2"
+          :disabled="isLoading"
+          @click="isChangingModel = true"
+        />
+        <GarmentComponent @garment-selected="onGarmentChange">
+          <IconButtonComponent
+            :icon="Shirt"
+            :disabled="isLoading"
+          />
         </GarmentComponent>
       </div>
-      <TextButtonComponent text="Vestir roupa!" @click="tryOn" />
+      <TextButtonComponent
+        text="Vestir roupa!"
+        :disabled="isLoading || !modelImage || !garmentImage"
+        @click="tryOn"
+      />
     </div>
     <GarmentComponent />
   </template>
