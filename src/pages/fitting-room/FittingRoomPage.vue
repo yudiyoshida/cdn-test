@@ -10,6 +10,7 @@ import ModelComponent from '@/components/model/ModelComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
 import type { GetPrediction } from '@/services/socket/events/get-prediction';
 import type { RunPrediction } from '@/services/socket/events/run-prediction';
+import GarmentComponent from '@/components/garment/GarmentComponent.vue';
 
 const isChangingModel = ref(true);
 const isLoading = ref(false);
@@ -71,5 +72,6 @@ function tryOn() {
       </div>
       <TextButtonComponent text="Vestir roupa!" @click="tryOn" />
     </div>
+    <GarmentComponent />
   </template>
 </template>
