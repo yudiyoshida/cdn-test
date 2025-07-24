@@ -6,7 +6,7 @@ import DrawerComponent from '@/lib/ui/drawer/DrawerComponent.vue';
 <template>
   <DrawerComponent>
     <template #trigger>
-      <button>Open Drawer</button>
+      <slot />
     </template>
     <div>
       <p>This is the content of the drawer.</p>

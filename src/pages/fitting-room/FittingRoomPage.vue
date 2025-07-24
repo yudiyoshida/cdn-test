@@ -68,7 +68,9 @@ function tryOn() {
     <div class="bottom-action">
       <div class="space-x-2">
         <IconButtonComponent :icon="User2" @click="isChangingModel = true" />
-        <IconButtonComponent :icon="Shirt" />
+        <GarmentComponent>
+          <IconButtonComponent :icon="Shirt" />
+        </GarmentComponent>
       </div>
       <TextButtonComponent text="Vestir roupa!" @click="tryOn" />
     </div>
