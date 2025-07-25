@@ -1,73 +1,73 @@
 import './assets/main.css';
 
-import { createPinia } from 'pinia';
+// import { createPinia } from 'pinia';
+// import { createApp } from 'vue';
+// import App from './App.vue';
+
+// const app = createApp(App);
+
+// app.use(createPinia());
+// app.mount('#app');
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApp } from 'vue';
-import App from './App.vue';
+import WidgetApp from './App.vue';
 
-const app = createApp(App);
+const WidgetSingleton = () => {
+  let appInstance: ReturnType<typeof createApp> | null = null;
+  let containerEl: HTMLElement | null = null;
+  let propsData: Record<string, any> = {};
 
-app.use(createPinia());
-app.mount('#app');
+  function createContainer() {
+    const el = document.createElement('div');
+    el.id = 'my-widget-container';
+    el.style.position = 'fixed';
+    el.style.bottom = '20px';
+    el.style.left = '20px';
+    el.style.zIndex = '999999';
+    document.body.appendChild(el);
+    return el;
+  }
 
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { createApp } from 'vue'
-// import WidgetApp from './App.vue'
+  function mount() {
+    if (appInstance) return;
 
-// const WidgetSingleton = () => {
-//   let appInstance: ReturnType<typeof createApp> | null = null
-//   let containerEl: HTMLElement | null = null
-//   let propsData: Record<string, any> = {}
+    containerEl = createContainer();
+    appInstance = createApp(WidgetApp, propsData);
+    appInstance.mount(containerEl);
+  }
 
-//   function createContainer() {
-//     const el = document.createElement('div')
-//     el.id = 'my-widget-container'
-//     el.style.position = 'fixed'
-//     el.style.bottom = '20px'
-//     el.style.left = '20px'
-//     el.style.zIndex = '999999'
-//     document.body.appendChild(el)
-//     return el
-//   }
+  function unmount() {
+    if (appInstance && containerEl) {
+      appInstance.unmount();
+      containerEl.remove();
+      appInstance = null;
+      containerEl = null;
+    }
+  }
 
-//   function mount() {
-//     if (appInstance) return
+  function updateProps(newProps: Record<string, any>) {
+    propsData = { ...propsData, ...newProps };
 
-//     containerEl = createContainer()
-//     appInstance = createApp(WidgetApp, propsData)
-//     appInstance.mount(containerEl)
-//   }
+    if (appInstance) {
+      unmount();
+      mount();
+    }
+  }
 
-//   function unmount() {
-//     if (appInstance && containerEl) {
-//       appInstance.unmount()
-//       containerEl.remove()
-//       appInstance = null
-//       containerEl = null
-//     }
-//   }
+  return {
+    open(config: Record<string, any> = {}) {
+      updateProps(config);
+      mount();
+    },
+    close() {
+      unmount();
+    },
+    update(config: Record<string, any> = {}) {
+      updateProps(config);
+    }
+  };
+};
 
-//   function updateProps(newProps: Record<string, any>) {
-//     propsData = { ...propsData, ...newProps }
-
-//     if (appInstance) {
-//       unmount()
-//       mount()
-//     }
-//   }
-
-//   return {
-//     open(config: Record<string, any> = {}) {
-//       updateProps(config)
-//       mount()
-//     },
-//     close() {
-//       unmount()
-//     },
-//     update(config: Record<string, any> = {}) {
-//       updateProps(config)
-//     }
-//   }
-// }
-
-// // Expor no objeto global
-// (window as any).MyWidget = WidgetSingleton()
+// Expor no objeto global
+(window as any).MyWidget = WidgetSingleton();
