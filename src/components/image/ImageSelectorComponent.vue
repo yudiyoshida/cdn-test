@@ -6,11 +6,10 @@ const file = ref<File | null>(null);
 
 defineExpose({
   selectImage,
-  file
 });
 
 const emit = defineEmits<{
-  (e: 'imageSelected', file: File): void;
+  (e: 'imageSelected', image: string): void;
 }>();
 
 function selectImage() {
@@ -19,12 +18,35 @@ function selectImage() {
   }
 }
 
-function onFileChange(event: Event) {
+async function onFileChange(event: Event) {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
     file.value = target.files[0];
-    emit('imageSelected', file.value);
+
+    if (!isValidImage(file.value)) {
+      console.error('Invalid image file selected');
+      return;
+    }
+    const base64 = await convertToBase64(file.value);
+    emit('imageSelected', base64);
   }
+}
+
+function isValidImage(file: File): boolean {
+  return file.type.startsWith('image/');
+}
+
+function convertToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      resolve(event.target?.result as string);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 </script>
 

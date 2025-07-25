@@ -4,7 +4,8 @@ import { Camera, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import IconButtonComponent from '@/components/button/IconButtonComponent.vue';
 import TextButtonComponent from '@/components/button/TextButtonComponent.vue';
 import ImageComponent from '@/components/image/ImageComponent.vue';
-import ImageSelectorComponent from '@/components/image/ImageSelectorComponent.vue';
+import ImageCropperComponent from '../image/ImageCropperComponent.vue';
+import ImageSelectorComponent from '../image/ImageSelectorComponent.vue';
 
 const emit = defineEmits<{
   (e: 'modelChanged', image: string): void;
@@ -19,6 +20,7 @@ const models = [
   'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_3.png',
 ];
 
+const isCropping = ref(false);
 const currentModel = ref(models[0]);
 const imageSelectorRef = useTemplateRef('imageSelectorRef');
 
@@ -39,65 +41,44 @@ function selectNextModel() {
   currentModel.value = models[nextIndex];
 }
 
-function onUserImageSelected(file: File) {
-  if (!isValidImage(file)) {
-    console.error('Invalid image file selected');
-    return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const imageUrl = event.target?.result;
-    if (imageUrl) {
-      currentModel.value = imageUrl as string;
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-function isValidImage(file: File): boolean {
-  return file.type.startsWith('image/');
-}
-
 function changeModel() {
   emit('modelChanged', currentModel.value);
+}
+
+function onImageSelected(image: string) {
+  currentModel.value = image;
+  isCropping.value = true;
+}
+
+function onImageCropped(blob: Blob) {
+  const imageUrl = URL.createObjectURL(blob);
+  currentModel.value = imageUrl;
+  isCropping.value = false;
+  emit('modelChanged', imageUrl);
 }
 </script>
 
 <template>
   <div class="flex items-center justify-center h-screen relative">
-    <ImageComponent :image="currentModel" />
+    <template v-if="!isCropping">
+      <ImageComponent :image="currentModel" />  
+      <IconButtonComponent :icon="ChevronLeft" class="circular-button absolute left-4" @click="selectPreviousModel" />
+      <IconButtonComponent :icon="ChevronRight" class="circular-button absolute right-4" @click="selectNextModel" />
+      <div class="bottom-action">
+        <TextButtonComponent text="Selecionar" class="w-full" @click="changeModel" />
+        <IconButtonComponent :icon="Camera" class="circular-button" @click="imageSelectorRef?.selectImage()" />
+      </div>
+    </template>
 
-    <div v-if="!imageSelectorRef?.file">
-      <IconButtonComponent
-        :icon="ChevronLeft"
-        class="circular-button absolute left-4"
-        @click="selectPreviousModel"
-      />
-      <IconButtonComponent
-        :icon="ChevronRight"
-        class="circular-button absolute right-4"
-        @click="selectNextModel"
-      />
-    </div>
-
-    <div class="bottom-action">
-      <TextButtonComponent
-        text="Selecionar"
-        class="w-full"
-        @click="changeModel"
-      />
-      <IconButtonComponent
-        :icon="Camera"
-        class="circular-button"
-        @click="imageSelectorRef?.selectImage()"
-      />
-    </div>
+    <template v-else>
+      <ImageCropperComponent :image="currentModel" @cancel="isCropping = false" @image-cropped="onImageCropped" />
+    </template>
   </div>
+
   <ImageSelectorComponent
-    @image-selected="onUserImageSelected"
-    class="hidden"
     ref="imageSelectorRef"
+    class="hidden"
+    @image-selected="onImageSelected"
   />
 </template>
 

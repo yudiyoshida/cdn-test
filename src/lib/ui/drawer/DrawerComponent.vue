@@ -14,7 +14,7 @@ import DrawerTrigger from './components/DrawerTrigger.vue';
     <DrawerContent class="p-4 pt-0 bg-white">
       <slot />
       <DrawerFooter class="p-0 pt-4">
-        <DrawerClose class="grid">
+        <DrawerClose>
           <slot name="action" />
         </DrawerClose>
       </DrawerFooter>

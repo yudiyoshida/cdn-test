@@ -74,7 +74,9 @@ async function onLoadMoreProducts() {
       <slot />
     </template>
     <template #action>
-      <TextButtonComponent text="Selecionar" @click="onSelect" :disabled="!selectedProduct" />
+      <div class="grid">
+        <TextButtonComponent text="Selecionar" @click="onSelect" :disabled="!selectedProduct" />
+      </div>
     </template>
   </DrawerComponent>
 </template>
