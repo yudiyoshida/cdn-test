@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/services/socket/socketio';
 import { toast } from 'vue-sonner';
-import { Shirt, User2 } from 'lucide-vue-next';
+import { Shirt, User2, X } from 'lucide-vue-next';
 import type { GetPrediction } from '@/services/socket/events/get-prediction';
 import type { RunPrediction } from '@/services/socket/events/run-prediction';
 import GarmentComponent from '@/components/garment/GarmentComponent.vue';
@@ -64,6 +64,7 @@ function tryOn() {
 </script>
 
 <template>
+  <IconButtonComponent class="absolute top-4 right-4 z-50 p-1!" :icon="X" />
   <LoadingComponent v-if="isLoading" />
 
   <ModelComponent v-if="isChangingModel" @model-changed="onModelChange" />

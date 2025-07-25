@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import LogoComponent from '@/components/logo/LogoComponent.vue';
+import { Routes } from '@/router';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const emit = defineEmits<{
-  (e: 'hide'): void;
-}>();
+const router = useRouter();
 
 onMounted(() => {
-  setTimeout(() => emit('hide'), 3000);
+  setTimeout(() => {
+    router.push({ name: Routes.HOME });
+  }, 3000);
 });
 </script>
 
