@@ -13,7 +13,7 @@ const showSplashScreen = ref(true);
 
 <template>
   <Toaster />
-  <div class="relative">
+  <div class="relative max-w-sm h-screen rounded-md border overflow-hidden">
     <template v-if="showSplashScreen">
       <SplashScreenPage @hide="showSplashScreen = false" />
     </template>
