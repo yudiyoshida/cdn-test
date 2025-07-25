@@ -62,6 +62,10 @@ function onMoreProducts() {
           </CardContent>
         </Card>
       </CarouselItem>
+
+      <template v-if="products.data.length === 0">
+        <p class="w-full text-center">Nenhum produto encontrado</p>
+      </template>
     </CarouselContent>
 
     <CarouselPrevious />

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CategoryComponent from '../category/CategoryComponent.vue';
 import DrawerComponent from '@/lib/ui/drawer/DrawerComponent.vue';
 import ProductCarouselComponent from '../carousel/ProductCarouselComponent.vue';
 import TextButtonComponent from '../button/TextButtonComponent.vue';
@@ -59,10 +60,24 @@ async function onLoadMoreProducts() {
     data: products.value.data.concat(result.data),
   };
 }
+
+async function onCategorySelected(categoryId: string) {
+  selectedProduct.value = null;
+  products.value.currentPage = 1;
+  products.value.itemsPerPage = 15;
+
+  products.value = await findAllProducts({
+    page: products.value.currentPage,
+    size: products.value.itemsPerPage,
+    categoryId,
+  });
+}
 </script>
 
 <template>
   <DrawerComponent>
+    <CategoryComponent @category-selected="onCategorySelected" />
+
     <ProductCarouselComponent
       :products
       :product-clicked-previously="selectedProduct"
