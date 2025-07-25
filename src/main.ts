@@ -22,8 +22,8 @@ const WidgetSingleton = () => {
     const el = document.createElement('div');
     el.id = 'my-widget-container';
     el.style.position = 'fixed';
-    el.style.bottom = '20px';
-    el.style.left = '20px';
+    el.style.bottom = '0';
+    el.style.left = '0';
     el.style.zIndex = '999999';
     document.body.appendChild(el);
     return el;
