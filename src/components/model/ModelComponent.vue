@@ -50,11 +50,10 @@ function onImageSelected(image: string) {
   isCropping.value = true;
 }
 
-function onImageCropped(blob: Blob) {
-  const imageUrl = URL.createObjectURL(blob);
-  currentModel.value = imageUrl;
+function onImageCropped(image: string) {
+  currentModel.value = image;
   isCropping.value = false;
-  emit('modelChanged', imageUrl);
+  emit('modelChanged', image);
 }
 </script>
 

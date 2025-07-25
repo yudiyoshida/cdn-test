@@ -8,14 +8,14 @@ const cropperRef = useTemplateRef('cropperRef');
 
 const screenHeight = ref(0);
 const screenWidth = ref(0);
-const croppedImage = ref<Blob | null>(null);
+const croppedImage = ref<string | null>(null);
 
 defineProps<{
   image: string;
 }>();
 
 const emit = defineEmits<{
-  (e: 'imageCropped', blob: Blob): void
+  (e: 'imageCropped', image: string): void
   (e: 'cancel'): void;
 }>();
 
@@ -29,14 +29,7 @@ async function cropImage() {
   if (cropper) {
     const cropperResult = cropper.getResult();
     if (cropperResult && cropperResult.canvas) {
-      cropperResult.canvas.toBlob((blob: Blob | null) => {
-        if (blob) {
-          croppedImage.value = blob;
-        }
-        else {
-          console.error('Failed to crop image');
-        }
-      }, 'image/png');
+      croppedImage.value = cropperResult.canvas.toDataURL('image/png');
     }
   }
 }
