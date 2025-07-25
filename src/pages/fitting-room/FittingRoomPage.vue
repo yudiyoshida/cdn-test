@@ -18,7 +18,7 @@ const isLoading = ref(false);
 const modelImage = ref<string | null>(null);
 const garmentImage = ref<string | null>(null);
 const category = 'auto';
-const mode = 'performance';
+const mode = 'balanced';
 
 onMounted(() => {
   socket.connect();
@@ -87,6 +87,5 @@ function tryOn() {
         @click="tryOn"
       />
     </div>
-    <GarmentComponent />
   </div>
 </template>

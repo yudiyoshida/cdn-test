@@ -19,7 +19,6 @@ async function findAllProducts(queries: ProductQuery = {}): Promise<Pagination<P
   if (queries.genderId) params.append('genderId', queries.genderId);
   if (queries.storeId) params.append('storeId', queries.storeId);
 
-  console.log({ params });
   return fetch(`${import.meta.env.VITE_API_URL}/guest/products?${params.toString()}`)
     .then(response => response.json())
     .then(dataPaginated => dataPaginated as Pagination<ProductDto>);

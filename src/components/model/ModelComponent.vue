@@ -19,9 +19,10 @@ const models = [
   'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_2.png',
   'https://dr3ssup.s3.us-east-2.amazonaws.com/models/female_3.png',
 ];
+const currentModel = ref(models[0]);
 
 const isCropping = ref(false);
-const currentModel = ref(models[0]);
+const imageSelected = ref<string | null>(null);
 const imageSelectorRef = useTemplateRef('imageSelectorRef');
 
 onMounted(() => {
@@ -46,14 +47,13 @@ function changeModel() {
 }
 
 function onImageSelected(image: string) {
-  currentModel.value = image;
+  imageSelected.value = image;
   isCropping.value = true;
 }
 
 function onImageCropped(image: string) {
   currentModel.value = image;
   isCropping.value = false;
-  emit('modelChanged', image);
 }
 </script>
 
@@ -70,7 +70,7 @@ function onImageCropped(image: string) {
     </template>
 
     <template v-else>
-      <ImageCropperComponent :image="currentModel" @cancel="isCropping = false" @image-cropped="onImageCropped" />
+      <ImageCropperComponent :image="imageSelected!" @cancel="isCropping = false" @image-cropped="onImageCropped" />
     </template>
   </div>
 
