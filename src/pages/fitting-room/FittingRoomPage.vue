@@ -65,9 +65,10 @@ function tryOn() {
 
 <template>
   <LoadingComponent v-if="isLoading" />
-  
+
   <ModelComponent v-if="isChangingModel" @model-changed="onModelChange" />
-  <template v-else>
+
+  <div v-show="!isChangingModel">
     <ImageComponent :image="modelImage!" />
     <div class="bottom-action">
       <div class="space-x-2">
@@ -77,10 +78,7 @@ function tryOn() {
           @click="isChangingModel = true"
         />
         <GarmentComponent @garment-selected="onGarmentChange">
-          <IconButtonComponent
-            :icon="Shirt"
-            :disabled="isLoading"
-          />
+          <IconButtonComponent :icon="Shirt" :disabled="isLoading" />
         </GarmentComponent>
       </div>
       <TextButtonComponent
@@ -90,5 +88,5 @@ function tryOn() {
       />
     </div>
     <GarmentComponent />
-  </template>
+  </div>
 </template>

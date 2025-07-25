@@ -10,7 +10,7 @@ type ProductQuery = {
   storeId?: string;
 }
 
-async function findAllProducts(queries: ProductQuery = {}): Promise<ProductDto[]> {
+async function findAllProducts(queries: ProductQuery = {}): Promise<Pagination<ProductDto>> {
   const params = new URLSearchParams();
   if (queries.page) params.append('page', queries.page.toString());
   if (queries.size) params.append('size', queries.size.toString());
@@ -22,8 +22,7 @@ async function findAllProducts(queries: ProductQuery = {}): Promise<ProductDto[]
   console.log({ params });
   return fetch(`${import.meta.env.VITE_API_URL}/guest/products?${params.toString()}`)
     .then(response => response.json())
-    .then(dataPaginated => dataPaginated as Pagination<ProductDto>)
-    .then(dataPaginated => dataPaginated.data);
+    .then(dataPaginated => dataPaginated as Pagination<ProductDto>);
 }
 
 export { findAllProducts };
