@@ -1,24 +1,7 @@
-
-// import { createPinia } from 'pinia';
-// import { createApp } from 'vue';
-// import App from './App.vue';
-// import router from './router';
-
 import { defineCustomElement } from "vue";
+import AppCe from "./App.ce.vue";
 
-
-// const app = createApp(App);
-
-// app.use(createPinia());
-// app.use(router);(
-
-// app.mount('#app');
-
-const MyApp = defineCustomElement({
-  props: {},
-  emits: {},
-  template: `...`, 
-});
+const MyApp = defineCustomElement(AppCe);
 
 customElements.define('my-app', MyApp);
 
