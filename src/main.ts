@@ -1,75 +1,25 @@
-import './assets/main.css';
 
-import { createPinia } from 'pinia';
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
-
-const app = createApp(App);
-
-app.use(createPinia());
-app.use(router);
-
-app.mount('#app');
-
+// import { createPinia } from 'pinia';
 // import { createApp } from 'vue';
-// import WidgetApp from './App.vue';
+// import App from './App.vue';
+// import router from './router';
 
-// const WidgetSingleton = () => {
-//   let appInstance: ReturnType<typeof createApp> | null = null;
-//   let containerEl: HTMLElement | null = null;
-//   let propsData: Record<string, any> = {};
+import { defineCustomElement } from "vue";
 
-//   function createContainer() {
-//     const el = document.createElement('div');
-//     el.id = 'my-widget-container';
-//     el.style.position = 'fixed';
-//     el.style.bottom = '0';
-//     el.style.left = '0';
-//     el.style.zIndex = '999999';
-//     document.body.appendChild(el);
-//     return el;
-//   }
 
-//   function mount() {
-//     if (appInstance) return;
+// const app = createApp(App);
 
-//     containerEl = createContainer();
-//     appInstance = createApp(WidgetApp, propsData);
-//     appInstance.mount(containerEl);
-//   }
+// app.use(createPinia());
+// app.use(router);(
 
-//   function unmount() {
-//     if (appInstance && containerEl) {
-//       appInstance.unmount();
-//       containerEl.remove();
-//       appInstance = null;
-//       containerEl = null;
-//     }
-//   }
+// app.mount('#app');
 
-//   function updateProps(newProps: Record<string, any>) {
-//     propsData = { ...propsData, ...newProps };
+const MyApp = defineCustomElement({
+  props: {},
+  emits: {},
+  template: `...`, 
+});
 
-//     if (appInstance) {
-//       unmount();
-//       mount();
-//     }
-//   }
+customElements.define('my-app', MyApp);
 
-//   return {
-//     open(config: Record<string, any> = {}) {
-//       updateProps(config);
-//       mount();
-//     },
-//     close() {
-//       unmount();
-//     },
-//     update(config: Record<string, any> = {}) {
-//       updateProps(config);
-//     }
-//   };
-// };
-
-// // Expor no objeto global
-// (window as any).MyWidget = WidgetSingleton();
+document.body.appendChild(new MyApp());
